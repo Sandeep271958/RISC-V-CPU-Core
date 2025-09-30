@@ -202,7 +202,12 @@ Link for the Makerchip IDE Simulation of the processor core: [Makerchip IDE](htt
 - Writes back results from ALU or memory.  
 
 ![Register File](Images/The_provided_register_file_instantiation__before_you_modify_it_.png)  
-
+```
+//Register File Read & Write
+   m4+rf(32, 32, $reset, $rd_valid, $rd[4:0], $wb_data[31:0], $rs1_valid, $rs1[4:0], $src1_value, $rs2_valid, $rs2[4:0], $src2_value) // Final Result after including the MUX ld_data
+   //m4+rf(32, 32, $reset, $rd_valid, $rd[4:0], $result[31:0], $rs1_valid, $rs1[4:0], $src1_value, $rs2_valid, $rs2[4:0], $src2_value) // Initial
+   //m4+rf(32, 32, $reset, $wr_en, $wr_index[4:0], $wr_data[31:0], $rd_en1, $rd_index1[4:0], $rd_data1, $rd_en2, $rd_index2[4:0], $rd_data2)   
+``` 
 
 ### Arithmetic Logic Unit (ALU)  
 - Performs arithmetic and logical operations (add, sub, and, or, shift, etc.).  
@@ -215,6 +220,13 @@ Link for the Makerchip IDE Simulation of the processor core: [Makerchip IDE](htt
 - Simplified single-cycle implementation.  
 
 ![Data Memory](images/dmem.png)  
+
+```
+//Data Memory
+   m4+dmem(32, 32, $reset, $result[6:2], $is_s_instr, $src2_value, $is_load, $ld_data)   
+   //m4+dmem(32, 32, $reset, $addr[4:0], $wr_en, $wr_data[31:0], $rd_en, $rd_data)
+
+```
 
 ---
 
