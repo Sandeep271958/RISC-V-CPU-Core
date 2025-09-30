@@ -20,7 +20,8 @@ The project demonstrates how the fundamental components of a processor work toge
 - [Waveforms](#waveforms)  
 - [Complete Code](#complete-code)  
 - [Simulation](#simulation)  
-- [References](#references)  
+- [References](#references)
+- [Acknowledgements](#acknowledgements)
 
 ---
 
@@ -329,3 +330,4 @@ The CPU was successfully synthesized and deployed to a Xilinx Nexys A7 FPGA. The
 ## Acknowledgements
 
 This project was developed based on the curriculum and labs from the "Building a RISC-V CPU Core (LFD111x)" course provided by The Linux Foundation and edX.
+[Certificate](https://courses.edx.org/certificates/20f7a15ca57f4ca4b162368939559d33)
