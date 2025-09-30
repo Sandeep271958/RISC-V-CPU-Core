@@ -109,8 +109,7 @@ Waveforms showing execution of sample programs:
 ---
 
 ## Complete Code  
-The **full implementation** of the single-cycle RISC-V CPU can be found in:  
-👉 [`src/`](src/)  
+The **full implementation** of the single-cycle RISC-V CPU can be found in:  [`RISC-V CPU Core`](risc-v_core.tlv)  
 
 ---
 
