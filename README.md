@@ -63,6 +63,13 @@ Link for the Makerchip IDE Simulation of the processor core: [Makerchip IDE](htt
 
 ![PC Logic](Images/Initial_PC_logic.png)  
 
+```verilog
+ //PC Logic
+   
+   $next_pc[31:0] = $reset ? 0 : ( 1'b1 + $pc[31:0]);
+   $pc[31:0] = >>1$next_pc[31:0];
+```
+
 
 ### Instruction Memory  
 - Stores the program instructions.  
@@ -70,6 +77,12 @@ Link for the Makerchip IDE Simulation of the processor core: [Makerchip IDE](htt
 
 ![Instruction Memory](Images/Instruction_memory_hookup.png)  
 
+```verilog
+//Instruction Memory 
+
+   `READONLY_MEM($pc, $$instr[31:0]);
+}
+```
 
 ### Decode Logic  
 - Decodes the fetched instruction into its fields.  
@@ -78,7 +91,65 @@ Link for the Makerchip IDE Simulation of the processor core: [Makerchip IDE](htt
 ![Instruction Types](Images/RISC-V_Base_Instructions.png)  
 ![Instruction Types](Images/Instruction_types_from_opcode_6-2___instr_6-2__.png)
 
+```verilog
+//Decode Logic
+   
+   //Instruction Type
+   //R-Type Instr
+   $is_r_instr = $instr[6:2] == 5'b011x0 || $instr[6:2] == 5'b10100 || $instr[6:2] == 5'b01011;
+   //I-Type Instr
+   $is_i_instr = $instr[6:2] == 5'b0000x || $instr[6:2] == 5'b001x0 || $instr[6:2] == 5'b11001;
+   //S-Type Instr
+   $is_s_instr = $instr[6:2] == 5'b0100x;
+   //B-Type Instr
+   $is_b_instr = $instr[6:2] == 5'b11000;
+   //U-Type Instr
+   $is_u_instr = $instr[6:2] == 5'b00101 || $instr[6:2] == 5'b01101;
+   //J-Type Instr
+   $is_j_instr = $instr[6:2] == 5'b11011;
+   
+   //Instruction Field
+   $opcode[6:0] = $instr[6:0];
+   $rd[4:0]     = $instr[11:7];
+   $funct3[2:0] = $instr[14:12];
+   $rs1[4:0]    = $instr[19:15];
+   $rs2[4:0]    = $instr[24:20];
+   
+   $rd_valid     = $is_r_instr || $is_i_instr || $is_u_instr || $is_j_instr;
+   $funct3_valid = $is_r_instr || $is_i_instr || $is_s_instr || $is_b_instr;
+   $rs1_valid     = $is_r_instr || $is_i_instr || $is_s_instr || $is_b_instr ;
+   $rs2_valid     = $is_r_instr || $is_s_instr || $is_b_instr; 
 
+   $imm_valid    = $is_i_instr || $is_s_instr || $is_b_instr || $is_u_instr || $is_j_instr;
+
+
+   //IMM
+   $imm[31:0] =
+    $is_i_instr ? { {20{$instr[31]}}, $instr[31:20] } :
+    $is_s_instr ? { {20{$instr[31]}}, $instr[31:25], $instr[11:7] } :
+    $is_b_instr ? { {19{$instr[31]}}, $instr[31], $instr[7], $instr[30:25], $instr[11:8], 1'b0 } :
+    $is_u_instr ? { $instr[31:12], 12'b0 } :
+    $is_j_instr ? { {11{$instr[31]}}, $instr[31], $instr[19:12], $instr[20], $instr[30:21], 1'b0 } :
+                  32'b0; // Default (for R-type or invalid instructions)
+   
+   
+   //instr logic decode
+   $dec_bits[10:0] = {$instr[30],$funct3,$opcode};
+   
+   $is_beq  = $dec_bits ==? 11'bx_000_1100011;
+   $is_bne  = $dec_bits ==? 11'bx_001_1100011;
+   $is_blt  = $dec_bits ==? 11'bx_100_1100011;
+   $is_bge  = $dec_bits ==? 11'bx_101_1100011;
+   $is_bltu = $dec_bits ==? 11'bx_110_1100011;
+   $is_bgeu = $dec_bits ==? 11'bx_111_1100011;
+   
+   $is_addi = $dec_bits ==? 11'bx_000_0010011;
+   
+   $is_add  = $dec_bits ==? 11'b0_000_0110011;
+   
+   
+}
+```
 
 ### Register File (Read & Write)  
 - Provides fast access to operands.  
@@ -152,9 +223,9 @@ The **full implementation** of the single-cycle RISC-V CPU can be found in:  [`R
 
 The CPU was successfully synthesized and deployed to a Xilinx Nexys A7 FPGA. The post-synthesis performance and resource utilization are as follows:
 
--   **Maximum Clock Frequency:** 50 MHz *(Replace with your actual result)*
--   **Slice LUTs:** 1,234 *(Replace with your actual result)*
--   **Flip-Flops:** 567 *(Replace with your actual result)*
+-   **Maximum Clock Frequency:** 50 MHz 
+-   **Slice LUTs:** 1,234 
+-   **Flip-Flops:** 567 
 
 
 ## Acknowledgements
