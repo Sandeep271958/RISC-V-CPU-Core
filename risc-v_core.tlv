@@ -228,17 +228,15 @@
    *failed = *cyc_cnt > M4_MAX_CYC;
 
    //-----------------------Register File Read & Write---------------------------------------------------
-   m4+rf(32, 32, $reset, $rd_valid, $rd[4:0], $wb_data[31:0], $rs1_valid, $rs1[4:0], $src1_value, $rs2_valid, $rs2[4:0], $src2_value) // Final Result after including the MUX ld_data
-   //m4+rf(32, 32, $reset, $rd_valid, $rd[4:0], $result[31:0], $rs1_valid, $rs1[4:0], $src1_value, $rs2_valid, $rs2[4:0], $src2_value) // Initial
+   m4+rf(32, 32, $reset, $rd_valid, $rd[4:0], $wb_data[31:0], $rs1_valid, $rs1[4:0], $src1_value, $rs2_valid, $rs2[4:0], $src2_value)
+   //m4+rf(32, 32, $reset, $rd_valid, $rd[4:0], $result[31:0], $rs1_valid, $rs1[4:0], $src1_value, $rs2_valid, $rs2[4:0], $src2_value)
    //m4+rf(32, 32, $reset, $wr_en, $wr_index[4:0], $wr_data[31:0], $rd_en1, $rd_index1[4:0], $rd_data1, $rd_en2, $rd_index2[4:0], $rd_data2)   
    //-----------------------Data Memory--------------------------------------------------------------------
-   m4+dmem(32, 32, $reset, $result[6:2], $is_s_instr, $src2_value, $is_load, $ld_data)   
-   //m4+dmem(32, 32, $reset, $addr[4:0], $wr_en, $wr_data[31:0], $rd_en, $rd_data)
+   m4+dmem(32, 32, $reset, $result[6:2], $is_s_instr, $src2_value, $is_load, $ld_data)   //m4+dmem(32, 32, $reset, $addr[4:0], $wr_en, $wr_data[31:0], $rd_en, $rd_data)
    
    // Mux to select the data to be written back to the register file.
    $wb_data[31:0] = $is_load ? $ld_data : $result;
    //-----------------------CPU Visualisation--------------------------------------------------------------
    m4+cpu_viz()
-   //------------------------------------------------------------------------------------------------------
 \SV
    endmodule
