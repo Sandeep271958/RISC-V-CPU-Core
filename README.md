@@ -90,7 +90,7 @@ Link for the Makerchip IDE Simulation of the processor core: [Makerchip IDE](htt
 ### Arithmetic Logic Unit (ALU)  
 - Performs arithmetic and logical operations (add, sub, and, or, shift, etc.).  
 
-![ALU Operations](images/alu.png)  
+![ALU Operations](Images/RV32I_Base_Integer_Instructions.png)  
 
 
 ### Data Memory (DMem)  
