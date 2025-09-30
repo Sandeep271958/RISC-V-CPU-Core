@@ -34,12 +34,12 @@ The project demonstrates how the fundamental components of a processor work toge
 
 This CPU implements the full RV32I instruction set, with working fetch, decode, execute, and writeback stages. 
 
-Link for the Makerchip IDE Simulation of the processor core: 
+Link for the Makerchip IDE Simulation of the processor core: [Makerchip IDE](https://makerchip.com/sandbox/0QWf6hoP/0P1h04V#).  
 
 ---
 
 ## CPU Datapath  
-![RISC-V Datapath](images/datapath.png)  
+![RISC-V Datapath](Images/CPU_Diagram.png)  
 
 ---
 ## Implementation Plan  
@@ -51,6 +51,9 @@ Link for the Makerchip IDE Simulation of the processor core:
 6. Add **Data Memory (DMem)** for load/store instructions.  
 7. Verify design with **test programs** and **waveform analysis**.
 
+![RISC-V Processor Diagram](Images/RISC-V_CPU_Block_Diagram.png)  
+
+
 ---
 ## Modules  
 
@@ -58,28 +61,30 @@ Link for the Makerchip IDE Simulation of the processor core:
 - Responsible for selecting the next instruction.  
 - Supports **sequential execution**, **branches**, and **jumps**.  
 
-![PC Logic](images/pc_logic.png)  
+![PC Logic](Images/Initial_PC_logic.png)  
 
 
 ### Instruction Memory  
 - Stores the program instructions.  
 - Fetches instructions based on PC value.  
 
-![Instruction Memory](images/instruction_memory.png)  
+![Instruction Memory](Images/Instruction_memory_hookup.png)  
 
 
 ### Decode Logic  
 - Decodes the fetched instruction into its fields.  
 - Identifies source registers, destination register, immediate values, and opcode.  
 
-![Instruction Types](images/instruction_types.png)  
+![Instruction Types](Images/RISC-V_Base_Instructions.png)  
+![Instruction Types](Images/Instruction_types_from_opcode_6-2___instr_6-2__.png)
+
 
 
 ### Register File (Read & Write)  
 - Provides fast access to operands.  
 - Writes back results from ALU or memory.  
 
-![Register File](images/register_file.png)  
+![Register File](Images/The_provided_register_file_instantiation__before_you_modify_it_.png)  
 
 
 ### Arithmetic Logic Unit (ALU)  
@@ -99,7 +104,7 @@ Link for the Makerchip IDE Simulation of the processor core:
 ## Waveforms  
 Waveforms showing execution of sample programs:  
 
-![Waveform Example](images/waveform.png)  
+![Waveform Example](Images/Waveforms.png)  
 
 ---
 
@@ -110,14 +115,14 @@ The **full implementation** of the single-cycle RISC-V CPU can be found in:
 ---
 
 ## Simulation  
-- The CPU is designed and simulated on the [Makerchip IDE](https://makerchip.com).  
+- The CPU is designed and simulated on the [Makerchip IDE](https://makerchip.com/sandbox/0QWf6hoP/0P1h04V#).  
 - Makerchip provides both **visual datapath** diagrams and **waveform outputs**.  
-
+![Visualisation of CPU Core](Images/Visual_CPU_Program.png)
 ---
 
 ## References  
-- [RISC-V ISA Specification](https://riscv.org/technical/specifications/)  
-- [Makerchip TL-Verilog Platform](https://makerchip.com)  
+- [RISC-V ISA Specification](https://riscv.org/technical/specifications/)
+- [RISC-V RV32I Base Integer Instructions](https://www.cs.sfu.ca/~ashriram/Courses/CS295/assets/notebooks/RISCV/RISCV_CARD.pdf)
 - *Digital Design and Computer Architecture, RISC-V Edition* – David Harris & Sarah Harris  
 
 ---
