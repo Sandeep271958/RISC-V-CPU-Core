@@ -202,7 +202,7 @@ Link for the Makerchip IDE Simulation of the processor core: [Makerchip IDE](htt
 - Writes back results from ALU or memory.  
 
 ![Register File](Images/The_provided_register_file_instantiation__before_you_modify_it_.png)  
-```
+```verilog
 //Register File Read & Write
    m4+rf(32, 32, $reset, $rd_valid, $rd[4:0], $wb_data[31:0], $rs1_valid, $rs1[4:0], $src1_value, $rs2_valid, $rs2[4:0], $src2_value) // Final Result after including the MUX ld_data
    //m4+rf(32, 32, $reset, $rd_valid, $rd[4:0], $result[31:0], $rs1_valid, $rs1[4:0], $src1_value, $rs2_valid, $rs2[4:0], $src2_value) // Initial
@@ -213,15 +213,49 @@ Link for the Makerchip IDE Simulation of the processor core: [Makerchip IDE](htt
 - Performs arithmetic and logical operations (add, sub, and, or, shift, etc.).  
 
 ![ALU Operations](Images/RV32I_Base_Integer_Instructions.png)  
+```verilog
+//ALU Result Multiplexer
+   
+   $result[31:0] =
+       // R-Type Instructions
+       $is_add  ? ($src1_value + $src2_value) :
+       $is_sub  ? ($src1_value - $src2_value) :
+       $is_sll  ? ($src1_value << $src2_value[4:0]) :
+       $is_slt  ? ( ($src1_value[31] == $src2_value[31]) ? $sltu_rslt : {31'b0, $src1_value[31]} ) :
+       $is_sltu ? $sltu_rslt :
+       $is_xor  ? ($src1_value ^ $src2_value) :
+       $is_srl  ? ($src1_value >> $src2_value[4:0]) :
+       $is_sra  ? $sra_rslt[31:0] :
+       $is_or   ? ($src1_value | $src2_value) :
+       $is_and  ? ($src1_value & $src2_value) :
+       // I-Type Instructions
+       $is_addi  ? ($src1_value + $imm) :
+       $is_slti  ? ( ($src1_value[31] == $imm[31]) ? $sltiu_rslt : {31'b0, $src1_value[31]} ) :
+       $is_sltiu ? $sltiu_rslt :
+       $is_xori  ? ($src1_value ^ $imm) :
+       $is_ori   ? ($src1_value | $imm) :
+       $is_andi  ? ($src1_value & $imm) :
+       $is_slli  ? ($src1_value << $imm[4:0]) :
+       $is_srli  ? ($src1_value >> $imm[4:0]) :
+       $is_srai  ? $srai_rslt[31:0] :
+       // U-Type Instructions
+       $is_lui   ? { $imm[31:12], 12'b0 } :
+       $is_auipc ? ($pc + $imm) :
+       // J-Type Instructions
+       $is_jal   ? ($pc + 32'd4) :
+       $is_jalr  ? ($pc + 32'd4) :
+       // Load / Store Instructions
+       ($is_load || $is_s_instr) ? ($src1_value + $imm) :
+                 32'b0; // Default for branches, loads, stores, etc.
+ ```  
 
 
 ### Data Memory (DMem)  
 - Supports **load** and **store** instructions.  
 - Simplified single-cycle implementation.  
 
-![Data Memory](images/dmem.png)  
 
-```
+```verilog
 //Data Memory
    m4+dmem(32, 32, $reset, $result[6:2], $is_s_instr, $src2_value, $is_load, $ld_data)   
    //m4+dmem(32, 32, $reset, $addr[4:0], $wr_en, $wr_data[31:0], $rd_en, $rd_data)
@@ -243,8 +277,14 @@ The **full implementation** of the single-cycle RISC-V CPU can be found in:  [`R
 ---
 
 ## Simulation  
-- The CPU is designed and simulated on the [Makerchip IDE](https://makerchip.com/sandbox/0QWf6hoP/0P1h04V#).  
-- Makerchip provides both **visual datapath** diagrams and **waveform outputs**.  
+- The CPU was **implemented and simulated** using the [Makerchip IDE](https://makerchip.com/sandbox/0QWf6hoP/0P1h04V#).  
+- Makerchip provides interactive **datapath visualizations (VIZ)** and **waveform outputs** for debugging and verification.  
+- To try it yourself:  
+  1. Open the Makerchip IDE link above.  
+  2. Click **Compile & Simulate**.  
+  3. View the **VIZ window** for the datapath execution and the **Waveform window** for signal-level details.  
+- The simulation runs test programs that exercise the **entire RV32I instruction set**, demonstrating correct fetch, decode, execute, memory, and write-back stages.  
+
 ![Visualisation of CPU Core](Images/Visual_CPU_Program.png)
 ---
 
