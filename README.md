@@ -35,7 +35,7 @@ The project demonstrates how the fundamental components of a processor work toge
 
 This CPU implements the full RV32I instruction set, with working fetch, decode, execute, and writeback stages. 
 
-Link for the Makerchip IDE Simulation of the processor core: [Makerchip IDE](https://makerchip.com/sandbox/0QWf6hoP/0P1h04V#).  
+**Link for the Makerchip IDE Simulation of the processor core:** [Simulation](https://makerchip.com/sandbox/0QWf6hoP/0P1h04V#).  
 
 ---
 
