@@ -82,7 +82,7 @@ This CPU implements the full RV32I instruction set, with working fetch, decode, 
 //Instruction Memory 
 
    `READONLY_MEM($pc, $$instr[31:0]);
-}
+
 ```
 
 ### Decode Logic  
